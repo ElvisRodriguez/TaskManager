@@ -3,10 +3,11 @@ import sys
 
 
 def create_test_file(filename):
-    script = '{filename}_test.py'.format(filename=filename)
+    script = '{filename}.py'.format(filename=filename)
     os.chdir(os.getcwd())
     with open(script, 'w') as new_file:
         new_file.write('import collections\n')
+        new_file.write('import os\n')
         new_file.write('import sys\n\n\n')
         new_file.write('\nclass {filename}(object):\n'.format(
             filename=filename.title()))

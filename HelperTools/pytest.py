@@ -5,7 +5,7 @@ def create_test_file(filename):
     test_file = '{filename}_test.py'.format(filename=filename)
     os.chdir(os.getcwd())
     with open(test_file, 'w') as new_file:
-        new_file.write('import random')
+        new_file.write('import random\n')
         new_file.write('import unittest\n\n')
         new_file.write('import {filename}\n\n'.format(filename=filename))
         new_file.write(

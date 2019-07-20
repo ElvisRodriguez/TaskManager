@@ -1,3 +1,4 @@
+import flask_login
 import hashlib
 import sqlite3 as sql
 import uuid
@@ -17,9 +18,10 @@ def check_password(hashed_password, user_password):
     ).hexdigest()
 
 
-class User(object):
+class User(flask_login.UserMixin):
     def __init__(self, database):
         self.database = database
+        self.id = None
 
     def insert_new_user(self, username, password, email):
         connection = sql.connect(self.database)
@@ -32,6 +34,7 @@ class User(object):
             )
             connection.commit()
             connection.close()
+            self.id = unicode(username, 'utf-8')
             return True
         except sql.IntegrityError:
             connection.close()

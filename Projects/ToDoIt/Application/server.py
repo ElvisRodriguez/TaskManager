@@ -1,31 +1,34 @@
-import flask
+from flask import escape, Flask, redirect, render_template, request, session, url_for
+import flask_login
+import os
 
 import TaskManager
 import User
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.secret_key = os.urandom(16)
 
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    if flask.request.method == 'POST':
-        username = flask.request.form['username']
-        password = flask.request.form['password']
-        return flask.render_template('home.html', username=username)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        return render_template('home.html', username=username)
     else:
-        return flask.render_template('login.html')
+        return render_template('login.html')
 
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
-    if flask.request.method == 'POST':
-        username = flask.request.form['username']
-        password = flask.request.form['password']
-        email = flask.request.form['email']
-        return flask.render_template('signup.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        return render_template('signup.html')
     else:
-        return flask.render_template('signup.html')
+        return render_template('signup.html')
 
 
 if __name__ == '__main__':

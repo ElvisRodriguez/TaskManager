@@ -34,7 +34,7 @@ class User(flask_login.UserMixin):
             )
             connection.commit()
             connection.close()
-            self.id = unicode(username, 'utf-8')
+            self.id = username.encode('utf-8')
             return True
         except sql.IntegrityError:
             connection.close()
@@ -49,5 +49,7 @@ class User(flask_login.UserMixin):
         )
         credentials = cursor.fetchone()
         connection.close()
-        return username == credentials[0] and check_password(
-            credentials[1], password)
+        if username == credentials[0] and check_password(credentials[1], password):
+            self.id = username.encode('utf-8')
+            return True
+        return False

@@ -1,4 +1,3 @@
-import random
 import unittest
 
 import TaskManager
@@ -35,4 +34,6 @@ class TestTaskManager(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    with open('test_output.txt', 'a') as file:
+        runner = unittest.TextTestRunner(file)
+        unittest.main(testRunner=runner)

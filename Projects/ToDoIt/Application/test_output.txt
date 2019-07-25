@@ -1,18 +1,18 @@
-Tests Results as of 2019-07-24:
-
-**************************************************
+Tests Results as of 2019-07-25:
+________________________________________________________________________________
 TaskManager_test.py results:
-
-Ran 3 tests in 0.091s
-
+test_insert_new_task (__main__.TestTaskManager) ... ok
+test_remove_task (__main__.TestTaskManager) ... ok
+test_retrieve_email (__main__.TestTaskManager) ... ok
+Ran 3 tests in 1.435s
 OK
-**************************************************
-
-**************************************************
+________________________________________________________________________________
+________________________________________________________________________________
 User_test.py results:
-
-Ran 3 tests in 0.050s
-
+test_duplicate_new_user (__main__.TestUser) ... ok
+test_insert_new_user (__main__.TestUser) ... ok
+test_login_user (__main__.TestUser) ... ok
+test_login_with_incorrect_password (__main__.TestUser) ... ok
+Ran 4 tests in 0.058s
 OK
-**************************************************
-
+________________________________________________________________________________

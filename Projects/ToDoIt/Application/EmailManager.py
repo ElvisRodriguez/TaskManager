@@ -20,25 +20,29 @@ class EmailManager(object):
         self.message = MIMEMultipart('alternative')
         self.STATUS_CODES = [235, 250]
 
-    def create_message(self, subject='', message=''):
-        self.message['Subject'] = subject
+    def create_test_result_message(self, passing, message=''):
+        self.message['Subject'] = 'Test Results'
         self.message['From'] = self.sender
+        possible_result = ('PASSING', 'green') if passing else ('FAILING', 'red')
+        result = '''
+            <p style="color:{color};">
+            {outcome}
+            </p>
+        '''.format(color=possible_result[1], outcome=possible_result[0])
         html = '''
             <html>
               <body>
-                <b><i>
+                {result}
+                <p>
                   {message}
-                </i></b>
+                </p>
               </body>
             </html>
-        '''.format(message=message)
+        '''.format(result=result, message=message)
         self.message.attach(MIMEText(message, 'plain'))
         self.message.attach(MIMEText(html, 'html'))
 
     def send_email(self, recepient):
-        if self.message is None:
-            print('Message not created yet')
-            return
         connection = self.handler.ehlo()
         if connection[0] in self.STATUS_CODES:
             print('Connection Status: OK')

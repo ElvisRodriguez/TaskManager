@@ -2,6 +2,9 @@ import datetime
 import os
 
 
+BLOCK_SIZE = 80
+
+
 def wipe_test_file(filename):
     os.chdir(os.getcwd())
     current_date = str(datetime.datetime.date(datetime.datetime.now()))
@@ -25,6 +28,18 @@ def add_test_results_to_file(filename, test_files):
         os.system('python3 {file}'.format(file=test_file))
 
 
+def determine_if_all_tests_passing(filename, test_files):
+    passing_tests = 0
+    number_of_tests = len(test_files)
+    with open(filename, 'r') as file:
+        for line in file.readlines():
+            if line == 'OK\n':
+                passing_tests += 1
+    if passing_tests == number_of_tests:
+        return True
+    return False
+
+
 def remove_non_text_from_file(filename):
     lines = []
     with open(filename, 'r') as file:
@@ -34,14 +49,13 @@ def remove_non_text_from_file(filename):
     with open(filename, 'w') as file:
         for line in lines:
             if 'results' in line:
-                file.write('*' * 50 + '\n')
+                file.write('_' * BLOCK_SIZE + '\n')
                 file.write(line)
             elif 'OK' in line:
                 file.write(line)
-                file.write('*' * 50 + '\n')
+                file.write('_' * BLOCK_SIZE + '\n')
             else:
                 file.write(line)
-            file.write('\n')
 
 
 if __name__ == '__main__':

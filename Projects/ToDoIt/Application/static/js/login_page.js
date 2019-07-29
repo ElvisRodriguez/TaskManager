@@ -1,6 +1,6 @@
-/*window.onload = function () {
-  document.getElementById('redirect_button').onclick = function () {
-    location.href='/signup';
-  };
+const redirectToSignup = () => {
+  location.href='/signup';
 };
-*/
+
+const redirectButton = document.getElementById('redirect_button');
+redirectButton.onclick = redirectToSignup;

@@ -27,7 +27,7 @@ def user_loader(user_id):
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    return render_template('index.html', username=current_user.username)
+    return render_template('index.html', username=current_user.username.title())
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,9 +50,14 @@ def signup():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     if request.method == 'POST':
+        error = None
         username = request.form['username']
         password = request.form['password']
+        re_entered_password = request.form['re_password']
         email = request.form['email']
+        if password != re_entered_password:
+            error = 'Passwords do not match'
+            return render_template('signup.html', error=error)
         user = User.User(username)
         if user.insert_new_user(password, email):
             user.find_id()
@@ -62,6 +67,12 @@ def signup():
             error = 'Username taken'
             return render_template('signup.html', error=error)
     return render_template('signup.html')
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

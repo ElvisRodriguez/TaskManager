@@ -1,10 +1,19 @@
-<!DOCTYPE html>
+{% block body %}
 <html>
  <head>ToDoIt Home</head>
+ <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
    </script>
- <script src="../static/js/login_page.js"></script>
+ <script defer src="../static/js/login_page.js"></script>
   <body>
+    <div>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
    <div class="login_box">
   	<h1>Welcome!</h1>
   	 <form action="/login" method="post">
@@ -18,3 +27,4 @@
 	 </div>
   </body>
 </html>
+{% endblock %}

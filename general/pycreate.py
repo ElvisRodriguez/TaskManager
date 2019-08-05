@@ -2,24 +2,33 @@ import os
 import sys
 
 
-def create_test_file(filename):
+SCRIPT_TEMPLATE = '''#Write a description of this class using a docstring.
+import os
+import sys
+
+
+class {filename}(object):
+    def __init__(self):
+        pass
+
+
+if __name__ == '__main__':
+    print(sys.argv[0])
+'''
+
+
+def create_new_file(filename, template=SCRIPT_TEMPLATE):
     script = '{filename}.py'.format(filename=filename)
     os.chdir(os.getcwd())
     with open(script, 'w') as new_file:
-        new_file.write('import collections\n')
-        new_file.write('import os\n')
-        new_file.write('import sys\n\n\n')
-        new_file.write('\nclass {filename}(object):\n'.format(
-            filename=filename.title()))
-        new_file.write('\tpass\n\n\n')
-        new_file.write('if __name__ == \'__main__\':\n')
-        new_file.write('\tprint(sys.argv[0])')
-        new_file.close()
+        if filename[0].islower():
+            filename = filename.title()
+        template = template.format(filename=filename)
+        new_file.write(template)
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        for i in range(1, len(sys.argv)):
-            create_test_file(sys.argv[i])
+        create_new_file(sys.argv[1])
     else:
-        print('Script filenames not given')
+        print('Python filename not given')

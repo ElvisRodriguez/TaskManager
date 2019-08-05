@@ -1,25 +1,48 @@
 import os
 import sys
 
-def create_test_file(filename):
+
+SCRIPT_TEMPLATE = '''
+import os
+import random
+import sys
+import unittest
+
+import {filename}
+
+
+class Test{filename}(unittest.TestCase):
+    def setUp(self):
+        self.{filename_object} = {filename}.{filename}()
+
+
+if __name__ == '__main__':
+    unittest.main()
+'''
+
+
+def camelcase_to_snakecase(string):
+    new_string = []
+    for char in string:
+        if char.isupper() and len(new_string) > 0:
+            new_string.append('_')
+        new_string.append(char)
+    return ''.join(new_string).lower()
+
+
+def create_test_file(filename, template=SCRIPT_TEMPLATE):
     test_file = '{filename}_test.py'.format(filename=filename)
     os.chdir(os.getcwd())
     with open(test_file, 'w') as new_file:
-        new_file.write('import random\n')
-        new_file.write('import unittest\n\n')
-        new_file.write('import {filename}\n\n'.format(filename=filename))
-        new_file.write(
-            '\nclass Test{filename}(unittest.TestCase()):\n'.format(
-                filename=filename.title()))
-        new_file.write('\tpass\n\n\n')
-        new_file.write('if __name__ == \'__main__\':\n')
-        new_file.write('\tunittest.main()')
-        new_file.close()
+        filename_object = camelcase_to_snakecase(filename)
+        template = template.format(
+            filename=filename, filename_object=filename_object
+        )
+        new_file.write(template)
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        for i in range(1, len(sys.argv)):
-            create_test_file(sys.argv[i])
+        create_test_file(sys.argv[1])
     else:
-        print('Test filenames not given')
+        print('Python test filename not given')

@@ -16,7 +16,7 @@ class NameSorter:
         while name != 'end':
             name = str(input('Name: '))
             self.names.append(name)
-        self.names.pop(self.names.index('end'))
+        self.names.pop(-1)
 
     def populate_file(self):
         current_directory = os.getcwd()
@@ -25,7 +25,7 @@ class NameSorter:
         with open(full_path, 'w') as file:
             for name in self.names:
                 file.write(name + '\n')
-            file.close()
+        print('Done')
 
 
 if __name__ == '__main__':

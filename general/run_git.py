@@ -29,7 +29,7 @@ def find_git_status(directories, push=False):
             os.system('git add .')
             os.system('git commit -m "git automatically pushed by daemon"')
             push_command = 'git push https://{username}:{password}@{directory}.biz/file.git --all'
-            push_command.format(username=username, password=password, directory=directory)
+            push_command = push_command.format(username=username, password=password, directory=directory)
             os.system(push_command)
 
 

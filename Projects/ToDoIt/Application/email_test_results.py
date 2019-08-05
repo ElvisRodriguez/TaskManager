@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/elvisrodriguez1992/anaconda3/bin/python
 import EmailManager
 
 from run_tests import *

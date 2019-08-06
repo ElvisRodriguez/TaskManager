@@ -6,6 +6,7 @@
  </head>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
    </script>
+   <script defer src="../static/js/index_page.js"></script>
   <body>
     <div>
         <a href="{{ url_for('index') }}">Home</a>
@@ -15,7 +16,17 @@
         <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </div>
-    <h1>Welcome {{username}}</h1>
+    <h1>Welcome, {{username}}</h1>
+    <p>Insert a New Task/Reminder</p>
+    <form action="/index" method="post">
+     <input type="text" name="task" id="task" placeholder="Task/Reminder" required/>
+      <br>
+     <input type="date" name="date" id="date" placeholder="Date" required/>
+      <br>
+     <input type="time" name="time" id="time" placeholder="Time" required/>
+      <br>
+     <input type="submit" class="submit_button" value="Submit"/>
+    </form>
   </body>
 </html>
 {% endblock %}

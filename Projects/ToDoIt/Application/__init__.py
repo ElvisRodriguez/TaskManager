@@ -27,7 +27,15 @@ def user_loader(user_id):
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    return render_template('index.html', username=current_user.username.title())
+    username = current_user.username.title()
+    if request.method == 'GET':
+        return render_template('index.html', username=username)
+    if request.method == 'POST':
+        task = request.form['task']
+        date = request.form['date']
+        time = request.form['time']
+        print('{} @ {}|{}'.format(task, date, time))
+        return render_template('index.html', username=username)
 
 
 @app.route('/login', methods=['GET', 'POST'])

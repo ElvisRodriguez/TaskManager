@@ -34,7 +34,6 @@ def index():
         task = request.form['task']
         date = request.form['date']
         time = request.form['time']
-        print('{} @ {}|{}'.format(task, date, time))
         return render_template('index.html', username=username)
 
 

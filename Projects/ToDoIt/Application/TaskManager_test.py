@@ -16,8 +16,10 @@ class TestTaskManager(unittest.TestCase):
         date = '12/11/1993'
         self.task_manager.insert_new_task(task, date, self.username)
         all_tasks = self.task_manager.retrieve_tasks(self.username)
+        self.id = all_tasks[0][0]
+        actual_task = (all_tasks[0][1], all_tasks[0][2])
         message = 'Task should have been added to ToDoTable'
-        self.assertIn(self.task, all_tasks, message)
+        self.assertEqual(self.task, actual_task, message)
 
     def test_remove_task(self):
         task = 'Write more tests!'

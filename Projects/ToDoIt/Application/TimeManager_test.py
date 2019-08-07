@@ -62,4 +62,6 @@ class TestTimeManager(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    with open('test_output.txt', 'a') as file:
+        runner = unittest.TextTestRunner(stream=file, verbosity=2)
+        unittest.main(testRunner=runner)

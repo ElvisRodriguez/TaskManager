@@ -18,6 +18,13 @@
     </div>
     <h1>Welcome, {{username}}</h1>
     <p>Insert a New Task/Reminder</p>
+    {% if error %}
+      <br>
+      <p class=error>
+        <strong>Error:</strong> {{ error }}
+      </p>
+      <br>
+    {% endif %}
     <form action="/index" method="post">
      <input type="text" name="task" id="task" placeholder="Task/Reminder" required/>
       <br>
@@ -27,6 +34,10 @@
       <br>
      <input type="submit" class="submit_button" value="Submit"/>
     </form>
+    {% if table %}
+      <p> Your Tasks </p>
+      {{ table }}
+    {% endif %}
   </body>
 </html>
 {% endblock %}

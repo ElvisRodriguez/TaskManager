@@ -18,27 +18,47 @@ class TaskManager(object):
     def insert_new_task(self, task, date, username):
         connection = sql.connect(self.database)
         cursor = connection.cursor()
-        cursor.execute('INSERT INTO ToDoTable (Task, TaskDate, Username) VALUES (?,?,?)',
-                       (task, date, username)
-                       )
+        cursor.execute(
+            'INSERT INTO ToDoTable (Task, TaskDate, Username) VALUES (?,?,?)',
+            (task, date, username)
+        )
         connection.commit()
         connection.close()
 
     def remove_task(self, task, date, username):
         connection = sql.connect(self.database)
         cursor = connection.cursor()
-        cursor.execute('DELETE FROM ToDoTable WHERE task=? AND TaskDate=? AND Username=?',
-                       (task, date, username)
-                       )
+        cursor.execute(
+            'DELETE FROM ToDoTable WHERE Task=? AND TaskDate=? AND Username=?',
+            (task, date, username)
+        )
+        connection.commit()
+        connection.close()
+
+    def remove_task_by_id(self, id):
+        connection = sql.connect(self.database)
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM ToDoTable WHERE ToDoID=?', (id,))
         connection.commit()
         connection.close()
 
     def retrieve_tasks(self, username):
         connection = sql.connect(self.database)
         cursor = connection.cursor()
-        cursor.execute('SELECT Task, TaskDate FROM ToDoTable WHERE Username=?',
-                       (username,)
-                       )
+        cursor.execute(
+            'SELECT ToDoID, Task, TaskDate FROM ToDoTable WHERE Username=?',
+            (username,)
+        )
         all_tasks = cursor.fetchall()
         connection.close()
         return all_tasks
+
+    def retrieve_task_by_id(self, id):
+        connection = sql.connect(self.database)
+        cursor = connection.cursor()
+        cursor.execute('SELECT Task, TaskDate FROM ToDoTable WHERE ToDoID=?',
+                       (id,)
+                       )
+        task = cursor.fetchone()
+        connection.close()
+        return task

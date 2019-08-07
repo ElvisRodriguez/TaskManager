@@ -1,6 +1,7 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+import getpass
 import os
 import smtplib
 import ssl
@@ -28,7 +29,10 @@ STATUS_MESSAGE_HTML = '''
 class EmailManager(object):
     def __init__(self, sender='todoit.manager@gmail.com'):
         self.sender = sender
-        self.password = sys.argv[1]
+        try:
+            self.password = sys.argv[1]
+        except IndexError:
+            self.password = getpass.getpass('Enter Email Password: ')
         context = ssl.create_default_context()
         self.handler = smtplib.SMTP_SSL(
             host='smtp.gmail.com', port=465, context=context

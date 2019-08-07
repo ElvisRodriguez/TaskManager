@@ -14,5 +14,11 @@ const checkPasswords = () => {
   }
 };
 
-const secondPasswordInput = document.getElementById('re_password');
-secondPasswordInput.oninput = checkPasswords;
+
+const main = () => {
+  const secondPasswordInput = document.getElementById('re_password');
+  secondPasswordInput.oninput = checkPasswords;
+};
+
+
+main();

@@ -1,5 +1,5 @@
 from flask import escape, flash, Flask, redirect, render_template, request
-from flask import session, url_for
+from flask import send_from_directory, session, url_for
 from flask_login import current_user, login_user, LoginManager, login_required
 from flask_login import logout_user
 
@@ -118,6 +118,13 @@ def remove_task():
         table = ItemTable.ItemTable(items)
         return redirect(url_for('index', username=username, table=table))
     return redirect(url_for('index', username=username))
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'), 'favicon.ico'
+    )
 
 
 if __name__ == '__main__':

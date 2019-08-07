@@ -1,6 +1,12 @@
 const redirectToSignup = () => {
-  location.href='/signup';
+  location.href = '/signup';
 };
 
-const redirectButton = document.getElementById('redirect_button');
-redirectButton.onclick = redirectToSignup;
+
+const main = () => {
+  const redirectButton = document.getElementById('redirect_button');
+  redirectButton.onclick = redirectToSignup;
+};
+
+
+main();

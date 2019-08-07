@@ -10,13 +10,13 @@ class User(flask_login.UserMixin):
         self.username = username
         self.database = database
 
-    def hash_password(self, password):
+    def __hash_password(self, password):
         salt = uuid.uuid4().hex
         return hashlib.sha256(
             salt.encode() + password.encode()
         ).hexdigest() + ':' + salt
 
-    def check_password(self, hashed_password, user_password):
+    def __check_password(self, hashed_password, user_password):
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(
             salt.encode() + user_password.encode()
@@ -25,7 +25,7 @@ class User(flask_login.UserMixin):
     def insert_new_user(self, password, email):
         connection = sql.connect(self.database)
         cursor = connection.cursor()
-        password = self.hash_password(password)
+        password = self.__hash_password(password)
         try:
             cursor.execute(
                 'INSERT INTO Users (Username, Password, Email) VALUES (?,?,?)',
@@ -47,7 +47,7 @@ class User(flask_login.UserMixin):
         )
         credentials = cursor.fetchone()
         connection.close()
-        if self.username == credentials[0] and self.check_password(
+        if self.username == credentials[0] and self.__check_password(
             credentials[1], password
         ):
             return True
@@ -63,11 +63,11 @@ class User(flask_login.UserMixin):
         connection.close()
         self.id = row[0]
 
-
-def find_username_with_id(database, id):
-    connection = sql.connect(database)
-    cursor = connection.cursor()
-    cursor.execute('SELECT Username FROM Users WHERE UserID=?', (id,))
-    row = cursor.fetchone()
-    connection.close()
-    return row[0]
+    @staticmethod
+    def find_username_with_id(database, id):
+        connection = sql.connect(database)
+        cursor = connection.cursor()
+        cursor.execute('SELECT Username FROM Users WHERE UserID=?', (id,))
+        row = cursor.fetchone()
+        connection.close()
+        return row[0]

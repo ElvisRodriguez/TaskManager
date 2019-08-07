@@ -4,17 +4,16 @@ TaskManager_test.py results:
 test_insert_new_task (__main__.TestTaskManager) ... ok
 test_remove_task (__main__.TestTaskManager) ... ok
 test_retrieve_email (__main__.TestTaskManager) ... ok
-Ran 3 tests in 0.536s
+Ran 3 tests in 0.108s
 OK
 ________________________________________________________________________________
 ________________________________________________________________________________
 User_test.py results:
-test_check_hashed_password (__main__.TestUser) ... ok
 test_duplicate_new_user (__main__.TestUser) ... ok
 test_insert_new_user (__main__.TestUser) ... ok
 test_login_user (__main__.TestUser) ... ok
 test_login_with_incorrect_password (__main__.TestUser) ... ok
-Ran 5 tests in 0.072s
+Ran 4 tests in 0.245s
 OK
 ________________________________________________________________________________
 ________________________________________________________________________________

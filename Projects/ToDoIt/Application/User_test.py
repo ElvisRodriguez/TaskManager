@@ -14,13 +14,6 @@ class TestUser(unittest.TestCase):
         self.password = 'HorseEatsSugarCube'
         self.email = 'unittest@gmail.com'
 
-    def test_check_hashed_password(self):
-        hashed_password = self.user.hash_password(self.password)
-        self.assertTrue(
-            self.user.check_password(hashed_password, self.password),
-            msg='Hash method should always return the same result'
-        )
-
     def test_insert_new_user(self):
         self.assertTrue(
             self.new_user.insert_new_user(self.password, self.email),

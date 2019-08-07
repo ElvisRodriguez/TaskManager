@@ -6,12 +6,14 @@ class TimeManager(object):
         self.timestamp = None
         self._days_ahead = None
 
-    def current_time(self):
+    @staticmethod
+    def current_time():
         raw_time = datetime.datetime.now()
         current_time = [raw_time.hour, raw_time.minute]
         return ':'.join([str(value) for value in current_time])
 
-    def current_date(self):
+    @staticmethod
+    def current_date():
         raw_date = datetime.datetime.date()
         current_date = [raw_date.year, raw_date.month, raw_date.day]
         return '-'.join([str(value) for value in current_date])

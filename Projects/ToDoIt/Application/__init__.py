@@ -20,7 +20,7 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def user_loader(user_id):
-    username = User.find_username_with_id('todo_table.db', user_id)
+    username = User.User.find_username_with_id('todo_table.db', user_id)
     user = User.User(username)
     return user
 

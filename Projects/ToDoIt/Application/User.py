@@ -1,6 +1,8 @@
 import flask_login
 import hashlib
+import jwt
 import sqlite3 as sql
+import time
 import uuid
 
 
@@ -63,6 +65,45 @@ class User(flask_login.UserMixin):
         connection.close()
         self.id = row[0]
 
+    def reset_password(self, new_password):
+        connection = sql.connect(self.database)
+        cursor = connection.cursor()
+        cursor.execute(
+            'SELECT Password FROM Users WHERE Username=?',
+            (self.username,)
+        )
+        row = cursor.fetchone()
+        old_password = row[0]
+        if self.__check_password(old_password, new_password):
+            return False
+        new_password = self.__hash_password(new_password)
+        cursor.execute(
+            'UPDATE Users SET Password=? WHERE Username=?',
+            (new_password, self.username)
+        )
+        connection.commit()
+        connection.close()
+        return True
+
+    def get_reset_password_token(self, secret_key, id, expires_in=60000):
+        self.id = id
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': time.time() + expires_in},
+            secret_key, algorithm='HS256'
+        ).decode('utf-8')
+
+    @staticmethod
+    def find_username_with_email(database, email):
+        connection = sql.connect(database)
+        cursor = connection.cursor()
+        cursor.execute('SELECT Username FROM Users WHERE Email=?', (email,))
+        row = cursor.fetchone()
+        connection.close()
+        if row:
+            username = row[0]
+            return username
+        return None
+
     @staticmethod
     def find_username_with_id(database, id):
         connection = sql.connect(database)
@@ -70,4 +111,28 @@ class User(flask_login.UserMixin):
         cursor.execute('SELECT Username FROM Users WHERE UserID=?', (id,))
         row = cursor.fetchone()
         connection.close()
-        return row[0]
+        if row:
+            username = row[0]
+            return username
+        return None
+
+    @staticmethod
+    def find_id_with_username(database, username):
+        connection = sql.connect(database)
+        cursor = connection.cursor()
+        cursor.execute('SELECT UserID FROM Users WHERE Username=?', (username,))
+        row = cursor.fetchone()
+        connection.close()
+        if row:
+            id = row[0]
+            return id
+        return None
+
+    @staticmethod
+    def verify_reset_password_token(token, secret_key):
+        try:
+            id = jwt.decode(token, secret_key,
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return None
+        return id

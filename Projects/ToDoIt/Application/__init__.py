@@ -6,10 +6,14 @@ from flask_login import logout_user
 import os
 import sqlite3 as sql
 
+import EmailManager
 import ItemTable
 import TaskManager
 import TimeManager
 import User
+
+
+DATABASE = 'todo_table.db'
 
 
 app = Flask(__name__)
@@ -20,7 +24,7 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def user_loader(user_id):
-    username = User.User.find_username_with_id('todo_table.db', user_id)
+    username = User.User.find_username_with_id(DATABASE, user_id)
     user = User.User(username)
     return user
 
@@ -67,8 +71,10 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.User(username=username)
+        print(user.login_user(password))
         if user.login_user(password):
             user.find_id()
+            print(user.id)
             login_user(user)
             return redirect(url_for('index'))
     return render_template('login.html')
@@ -118,6 +124,56 @@ def remove_task():
         table = ItemTable.ItemTable(items)
         return redirect(url_for('index', username=username, table=table))
     return redirect(url_for('index', username=username))
+
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        email = request.form['email']
+        username = User.User.find_username_with_email(DATABASE, email)
+        id = User.User.find_id_with_username(DATABASE, username)
+        if username and id:
+            user = User.User(username)
+            secret_key = app.config['SECRET_KEY']
+            token = user.get_reset_password_token(secret_key, id)
+            url = url_for('reset_password', token=token, _external=True)
+            password = None
+            with open('passwords.txt', 'r') as file:
+                password = file.readline()[:-1]
+            email_manager = EmailManager.EmailManager(password=password)
+            email_manager.create_password_reset_message(username, url)
+            email_manager.send_email(email)
+            return redirect(url_for('login'))
+        error = 'Email does not exist'
+        return render_template('reset_password_request.html', error=error)
+    return render_template('reset_password_request.html')
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    secret_key = app.config['SECRET_KEY']
+    error = None
+    id = User.User.verify_reset_password_token(token, secret_key)
+    if id is None:
+        error = 'Invalid Token, may be expired.'
+        return url_for('index', error=error)
+    if request.method == 'POST':
+        username = User.User.find_username_with_id(DATABASE, id)
+        user = User.User(username)
+        new_password = request.form['password']
+        re_new_password = request.form['re_password']
+        if new_password != re_new_password:
+            error = 'Passwords do not match'
+            return url_for('index', error=error)
+        if user.reset_password(new_password):
+            return redirect(url_for('login'))
+        error = 'New Password cannot be old password'
+        return url_for('index', error=error)
+    return render_template('reset_password.html', token=token)
 
 
 @app.route('/favicon.ico')

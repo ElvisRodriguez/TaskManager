@@ -7,10 +7,11 @@ import User
 class TestUser(unittest.TestCase):
     def setUp(self):
         self.username = 'PythonUnittest'
-        self.user = User.User(self.username, database='test.db')
+        self.database = 'test.db'
+        self.user = User.User(self.username, database=self.database)
         self.unique_username = 'PythonUnittest:{timestamp}'.format(
             timestamp=str(datetime.datetime.now()))
-        self.new_user = User.User(self.unique_username, database='test.db')
+        self.new_user = User.User(self.unique_username, database=self.database)
         self.password = 'HorseEatsSugarCube'
         self.email = 'unittest@gmail.com'
 
@@ -38,6 +39,31 @@ class TestUser(unittest.TestCase):
             self.user.login_user(incorrect_password),
             msg='Should always fail, this user/pass combo does not exist'
         )
+
+    def test_find_id(self):
+        self.user.find_id()
+        self.assertIsNotNone(self.user.id)
+        self.assertIsInstance(self.user.id, int)
+
+    def test_reset_password_with_same_password(self):
+        result = self.user.reset_password(self.password)
+        self.assertFalse(result)
+
+    def test_reset_password_with_new_password(self):
+        new_password = 'HorseEatsSaltCube'
+        result = self.user.reset_password(new_password)
+        self.assertTrue(result)
+        result = self.user.reset_password(self.password)
+        self.assertTrue(result)
+
+    def test_find_username_with_email(self):
+        username = User.User.find_username_with_email(self.database, self.email)
+        self.assertEqual(username, self.username)
+
+    def test_find_username_with_id(self):
+        id = User.User.find_id_with_username(self.database, self.username)
+        username = User.User.find_username_with_id(self.database, id)
+        self.assertEqual(username, self.username)
 
 
 if __name__ == '__main__':

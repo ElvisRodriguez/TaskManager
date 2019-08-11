@@ -1,5 +1,6 @@
 from flask import escape, flash, Flask, redirect, render_template, request
 from flask import send_from_directory, session, url_for
+from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_user, LoginManager, login_required
 from flask_login import logout_user
 
@@ -7,6 +8,7 @@ import os
 import sqlite3 as sql
 
 import EmailManager
+import forms
 import ItemTable
 import TaskManager
 import TimeManager
@@ -18,6 +20,7 @@ DATABASE = 'todo_table.db'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(os.urandom(16))
+bootstrap = Bootstrap(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -67,17 +70,17 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = forms.LoginForm(request.form)
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        remember_me = form.remember_me.data
         user = User.User(username=username)
-        print(user.login_user(password))
         if user.login_user(password):
             user.find_id()
-            print(user.id)
             login_user(user)
             return redirect(url_for('index'))
-    return render_template('login.html')
+    return render_template('login.html', title='Login', form=form)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -181,6 +184,11 @@ def favicon():
     return send_from_directory(
         os.path.join(app.root_path, 'static'), 'favicon.ico'
     )
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':

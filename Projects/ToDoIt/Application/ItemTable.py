@@ -2,10 +2,11 @@ from flask_table import ButtonCol, Col, Table
 
 
 class ItemTable(Table):
-    task = Col('Task Name')
-    date = Col('Task Event Date')
+    classes = ['tasks_table']
+    task = Col('Task')
+    date = Col('Remind Me @')
     clear = ButtonCol(
-        'Clear Task', 'remove_task', url_kwargs=dict(id='id')
+        name='Clear Task', endpoint='remove_task', url_kwargs=dict(id='id')
     )
 
 

@@ -15,10 +15,21 @@ const getCurrentDate = (element) => {
   element.setAttribute("max", "2070-01-01");
 };
 
+const changeButtonColumnName = () => {
+  const tags = document.getElementsByTagName('th');
+  for (let i = 0; i < tags.length; i++) {
+    if (tags[i].innerText == 'Clear Task') {
+      tags[i].innerText = 'Options';
+      break;
+    }
+  }
+}
+
 
 const main = () => {
   let date = document.getElementById("date");
   getCurrentDate(date);
+  changeButtonColumnName();
 };
 
 

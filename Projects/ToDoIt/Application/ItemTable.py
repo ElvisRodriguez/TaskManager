@@ -6,7 +6,10 @@ class ItemTable(Table):
     task = Col('Task')
     date = Col('Remind Me @')
     clear = ButtonCol(
-        name='Clear Task', endpoint='remove_task', url_kwargs=dict(id='id')
+        name='Clear Task',
+        endpoint='remove_task',
+        url_kwargs=dict(id='id'),
+        button_attrs={'class': 'btn btn-default'}
     )
 
 

@@ -3,13 +3,13 @@ from flask_table import ButtonCol, Col, Table
 
 class ItemTable(Table):
     classes = ['tasks_table']
-    task = Col('Task')
+    task = Col('Task', column_html_attrs={'class': 'task_row'})
     date = Col('Remind Me @')
     clear = ButtonCol(
         name='Clear Task',
         endpoint='remove_task',
         url_kwargs=dict(id='id'),
-        button_attrs={'class': 'btn btn-default'}
+        button_attrs={'class': 'btn btn-default task-btn'}
     )
 
 

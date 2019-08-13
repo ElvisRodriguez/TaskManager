@@ -40,6 +40,7 @@ def index():
     username = current_user.username.title()
     task_manager = TaskManager.TaskManager()
     table = None
+    form = forms.CreateTaskForm(request.form)
     all_tasks = task_manager.retrieve_tasks(username)
     if all_tasks:
         items = ItemTable.objectify(all_tasks)
@@ -47,19 +48,23 @@ def index():
     if request.method == 'GET':
         if table:
             return render_template(
-                'index.html', username=username, table=table, title='Home'
+                'index.html', username=username, table=table, title='Home',
+                form=form
             )
-        return render_template('index.html', username=username, title='Home')
-    if request.method == 'POST':
+        return render_template(
+            'index.html', username=username, title='Home', form=form
+        )
+    if form.validate_on_submit():
         error = None
         time_manager = TimeManager.TimeManager()
-        task = request.form['task']
-        date = request.form['date']
-        time = request.form['time']
+        task = form.task.data
+        timestamp = form.timestamp.data
+        date, time = str(timestamp).split(' ')
         if not time_manager.create_timestamp(date, time):
             error = 'Date/Time must be after current Date/Time'
             return render_template(
-                'index.html', username=username, error=error, title='Home'
+                'index.html', username=username, error=error, title='Home',
+                form=form
             )
         timestamp = time_manager.timestamp
         task_manager.insert_new_task(task, timestamp, username)
@@ -68,9 +73,12 @@ def index():
             items = ItemTable.objectify(all_tasks)
             table = ItemTable.ItemTable(items)
             return render_template(
-                'index.html', username=username, table=table, title='Home'
+                'index.html', username=username, table=table, title='Home',
+                form=form
             )
-        return render_template('index.html', username=username, title='Home')
+    return render_template(
+        'index.html', username=username, title='Home', form=form
+    )
 
 
 @app.route('/login', methods=['GET', 'POST'])

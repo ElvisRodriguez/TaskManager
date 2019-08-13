@@ -24,7 +24,11 @@ class SignUpForm(FlaskForm):
 
 class CreateTaskForm(FlaskForm):
     task = TextAreaField('Task', validators=[DataRequired()])
-    timestamp = DateTimeField('Date And Time', validators=[DataRequired()])
+    timestamp = DateTimeField(
+        'Date And Time, Enter as \'YYYY-MM-DD HH:MM\'',
+        format='%Y-%m-%d %H:%M',
+        validators=[DataRequired()]
+    )
     submit = SubmitField('Create Task')
 
 

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block app_content %}
 <!DOCTYPE html>
 <html>
@@ -9,23 +11,13 @@
   <body>
    <div class="signup_box">
   	<h1>Sign Up</h1>
+      <p id="log" style="color: red">Passwords do not match<p>
       {% if error %}
         <p class=error>
           <strong>Error:</strong> {{ error }}
         </p>
       {% endif %}
-  	 <form action="/signup" method="post">
-      <input type="text" name="username" id="username" placeholder="Username" required/>
-    	 <br>
-      <input type="password" name="password" id="password" placeholder="Password" required/>
-    	 <br>
-       <input type="password" name="re_password" id="re_password" placeholder="Re-Enter Password" required/>
-     	 <br>
-       <p id="log" style="display: none"></p>
-       <input type="email" name="email" id="email" placeholder="Email" required/>
-       <br>
-    	<input type="submit" class="submit_button" value="Sign Up"/>
-  	 </form>
+  	 {{ wtf.quick_form(form) }}
 	 </div>
   </body>
 </html>

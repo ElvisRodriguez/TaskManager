@@ -1,8 +1,9 @@
-from flask import escape, flash, Flask, redirect, render_template, request
-from flask import send_from_directory, session, url_for
+from flask import (escape, flash, Flask, redirect, render_template, request,
+                   send_from_directory, session, url_for
+                   )
 from flask_bootstrap import Bootstrap
-from flask_login import current_user, login_user, LoginManager, login_required
-from flask_login import logout_user
+from flask_login import (current_user, login_user, LoginManager, login_required,
+                         logout_user)
 
 import os
 import sqlite3 as sql
@@ -45,8 +46,10 @@ def index():
         table = ItemTable.ItemTable(items)
     if request.method == 'GET':
         if table:
-            return render_template('index.html', username=username, table=table)
-        return render_template('index.html', username=username)
+            return render_template(
+                'index.html', username=username, table=table, title='Home'
+            )
+        return render_template('index.html', username=username, title='Home')
     if request.method == 'POST':
         error = None
         time_manager = TimeManager.TimeManager()
@@ -55,15 +58,19 @@ def index():
         time = request.form['time']
         if not time_manager.create_timestamp(date, time):
             error = 'Date/Time must be after current Date/Time'
-            return render_template('index.html', username=username, error=error)
+            return render_template(
+                'index.html', username=username, error=error, title='Home'
+            )
         timestamp = time_manager.timestamp
         task_manager.insert_new_task(task, timestamp, username)
         all_tasks = task_manager.retrieve_tasks(username)
         if all_tasks:
             items = ItemTable.objectify(all_tasks)
             table = ItemTable.ItemTable(items)
-            return render_template('index.html', username=username, table=table)
-        return render_template('index.html', username=username)
+            return render_template(
+                'index.html', username=username, table=table, title='Home'
+            )
+        return render_template('index.html', username=username, title='Home')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -87,15 +94,18 @@ def login():
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    if request.method == 'POST':
+    form = forms.SignUpForm(request.form)
+    if form.validate_on_submit():
         error = None
-        username = request.form['username']
-        password = request.form['password']
-        re_entered_password = request.form['re_password']
-        email = request.form['email']
+        username = form.username.data
+        password = form.password.data
+        re_entered_password = form.re_password.data
+        email = form.email.data
         if password != re_entered_password:
             error = 'Passwords do not match'
-            return render_template('signup.html', error=error)
+            return render_template(
+                'signup.html', error=error, form=form, title='Sign Up'
+            )
         user = User.User(username)
         if user.insert_new_user(password, email):
             user.find_id()
@@ -103,8 +113,10 @@ def signup():
             return redirect(url_for('index'))
         else:
             error = 'Username taken'
-            return render_template('signup.html', error=error)
-    return render_template('signup.html')
+            return render_template(
+                'signup.html', error=error, form=form, title='Sign Up'
+            )
+    return render_template('signup.html', form=form, title='Sign Up')
 
 
 @app.route('/logout')

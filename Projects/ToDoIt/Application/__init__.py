@@ -1,3 +1,6 @@
+'''
+Main Flask Application.
+'''
 from flask import (escape, flash, Flask, redirect, render_template, request,
                    send_from_directory, session, url_for
                    )

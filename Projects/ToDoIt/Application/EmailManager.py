@@ -1,3 +1,6 @@
+'''
+Sends emails on behalf of ToDoIt web application to both admins and users.
+'''
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -48,7 +51,22 @@ PASSWORD_RESET_HTML = '''
 
 
 class EmailManager(object):
+    '''Emails tests results to admin and password resets/pending tasks to users.
+    '''
+
     def __init__(self, sender='todoit.manager@gmail.com', password=None):
+        '''Initializes smtplib email handler.
+
+        Args:
+            sender: Email of application, generally not an argument that
+                    should be changed from the default.
+            password: Password of sender, can be passed in the constructor,
+                      provided as a command line argument, or given as input
+                      when prompted.
+
+        Returns:
+            None.
+        '''
         self.sender = sender
         try:
             self.password = sys.argv[1]
@@ -64,13 +82,31 @@ class EmailManager(object):
         self.message = MIMEMultipart('alternative')
         self.STATUS_CODES = [235, 250]
 
-    def create_password_reset_message(self, username, url):
+    def create_password_reset_message(self, username: str, url: str) -> None:
+        '''Formats an email with instructions for a password reset.
+
+        Args:
+            username: Username of user requesting a password reset.
+            url: URL of application's password reset page.
+
+        Returns:
+            None.
+        '''
         self.message['Subject'] = 'Password Reset'
         self.message['From'] = self.sender
         html = PASSWORD_RESET_HTML.format(username=username, url=url)
         self.message.attach(MIMEText(html, 'html'))
 
-    def create_test_result_message(self, passing, message=''):
+    def create_test_result_message(self, passing: bool, message: str) -> None:
+        '''Formats an email with the results of application's unit tests.
+
+        Args:
+            passing: True if all unit tests are passing, false otherwise.
+            message: Message containing output of unit tests.
+
+        Returns:
+            None.
+        '''
         self.message['Subject'] = 'Test Results'
         self.message['From'] = self.sender
         result = ('green', 'PASSING') if passing else ('red', 'FAILING')
@@ -79,7 +115,15 @@ class EmailManager(object):
         self.message.attach(MIMEText(message, 'plain'))
         self.message.attach(MIMEText(html, 'html'))
 
-    def send_email(self, recepient):
+    def send_email(self, recepient: str) -> None:
+        '''Sends preformatted email to recepient.
+
+        Args:
+            recepient: Email of the intended recepient.
+
+        Returns:
+            None.
+        '''
         connection = self.handler.ehlo()
         if connection[0] in self.STATUS_CODES:
             login = self.handler.login(self.sender, self.password)
@@ -89,10 +133,3 @@ class EmailManager(object):
                     self.sender, recepient, self.message.as_string()
                 )
                 self.handler.quit()
-
-
-if __name__ == '__main__':
-    gmail_obj = EmailManager()
-    message = 'Test message'
-    gmail_obj.create_message(subject='Testing', message=message)
-    gmail_obj.send_email(recepient='elvisrodriguez1992@gmail.com')

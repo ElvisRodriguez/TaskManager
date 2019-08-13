@@ -1,4 +1,8 @@
 #!/home/elvisrodriguez1992/anaconda3/bin/python
+'''
+Script run by cron everyday at 12:00 EST that emails all test results in
+Applications directory.
+'''
 import EmailManager
 import TestManager
 

@@ -145,8 +145,9 @@ def remove_task():
 def reset_password_request():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    if request.method == 'POST':
-        email = request.form['email']
+    form = forms.PasswordResetRequestForm(request.form)
+    if form.validate_on_submit():
+        email = form.email.data
         username = User.User.find_username_with_email(DATABASE, email)
         id = User.User.find_id_with_username(DATABASE, username)
         if username and id:
@@ -162,25 +163,26 @@ def reset_password_request():
             email_manager.send_email(email)
             return redirect(url_for('login'))
         error = 'Email does not exist'
-        return render_template('reset_password_request.html', error=error)
-    return render_template('reset_password_request.html')
+        return render_template('reset_password_request.html', error=error, form=form)
+    return render_template('reset_password_request.html', form=form)
 
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+    form = forms.PasswordResetForm(request.form)
     secret_key = app.config['SECRET_KEY']
     error = None
     id = User.User.verify_reset_password_token(token, secret_key)
     if id is None:
         error = 'Invalid Token, may be expired.'
         return url_for('index', error=error)
-    if request.method == 'POST':
+    if form.validate_on_submit():
         username = User.User.find_username_with_id(DATABASE, id)
         user = User.User(username)
-        new_password = request.form['password']
-        re_new_password = request.form['re_password']
+        new_password = form.password.data
+        re_new_password = form.re_password.data
         if new_password != re_new_password:
             error = 'Passwords do not match'
             return url_for('index', error=error)
@@ -188,7 +190,7 @@ def reset_password(token):
             return redirect(url_for('login'))
         error = 'New Password cannot be old password'
         return url_for('index', error=error)
-    return render_template('reset_password.html', token=token)
+    return render_template('reset_password.html', token=token, form=form)
 
 
 @app.route('/favicon.ico')

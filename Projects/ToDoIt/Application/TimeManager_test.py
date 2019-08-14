@@ -35,6 +35,40 @@ class TestTimeManager(unittest.TestCase):
             hour=(CURRENT_HOUR + 1),
             minute=CURRENT_MINUTE
         )
+        self.current_date = '{year}-{month}-{day}'.format(
+            year=CURRENT_YEAR,
+            month=CURRENT_MONTH,
+            day=CURRENT_DAY
+        )
+        self.current_time = '{hour}:{minute}'.format(
+            hour=CURRENT_HOUR,
+            minute=CURRENT_MINUTE
+        )
+
+    def test_current_date(self):
+        current_date = TimeManager.TimeManager.current_date()
+        self.assertEqual(current_date, self.current_date)
+
+    def test_current_time(self):
+        current_time = TimeManager.TimeManager.current_time()
+        self.assertEqual(current_time, self.current_time)
+
+    def test_create_datetime_object(self):
+        test_datetime = datetime.datetime(
+            CURRENT_YEAR,
+            CURRENT_MONTH,
+            CURRENT_DAY,
+            CURRENT_HOUR,
+            CURRENT_MINUTE
+        )
+        datetime_object = TimeManager.TimeManager.create_datetime_object(
+            self.current_date, self.current_time
+        )
+        self.assertEqual(test_datetime.year, datetime_object.year)
+        self.assertEqual(test_datetime.month, datetime_object.month)
+        self.assertEqual(test_datetime.day, datetime_object.day)
+        self.assertEqual(test_datetime.hour, datetime_object.hour)
+        self.assertEqual(test_datetime.minute, datetime_object.minute)
 
     def test_is_valid_date_with_invalid_date(self):
         self.assertFalse(self.time_manager.is_valid_date(self.invalid_date))

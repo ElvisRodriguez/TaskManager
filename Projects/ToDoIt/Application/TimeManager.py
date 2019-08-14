@@ -1,5 +1,5 @@
 '''
-Manages timestamps and date/time given by application's users.
+Manages timestamps and date/time retrieved from users and database.
 '''
 import datetime
 
@@ -44,9 +44,25 @@ class TimeManager(object):
         Returns:
             String with the date formatted as 'YYYY-MM-DD'.
         '''
-        raw_date = datetime.datetime.date()
+        raw_date = datetime.datetime.now()
         current_date = [raw_date.year, raw_date.month, raw_date.day]
         return '-'.join([str(value) for value in current_date])
+
+    @staticmethod
+    def create_datetime_object(date: str, time: str) -> datetime.datetime:
+        '''Creates a datetime object from date and time string representations.
+
+        Args:
+            date: String representing a date in the format 'YYYY-MM-DD'.
+            time: String representing a time in the format 'HH:MM'.
+
+        Returns:
+            A datetime.datetime object with the given date and time.
+        '''
+        year, month, day = [int(value) for value in date.split('-')]
+        hour, minute = [int(value) for value in time.split(':')]
+        datetime_object = datetime.datetime(year, month, day, hour, minute)
+        return datetime_object
 
     def is_valid_date(self, date: str) -> bool:
         '''Checks if date given is ahead of or is current date.
@@ -83,9 +99,7 @@ class TimeManager(object):
         current_time = datetime.datetime.now()
         current_hour = current_time.hour
         current_minute = current_time.minute
-        given_time = time.split(':')
-        given_hour = int(given_time[0])
-        given_minute = int(given_time[1])
+        given_hour, given_minute = [int(value) for value in time.split(':')]
         if given_hour < current_hour:
             return False
         if given_hour == current_hour:

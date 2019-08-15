@@ -1,6 +1,8 @@
 '''
 Manages all ToDoIt users including login and password reset functionality.
 '''
+from typing import *
+
 import flask_login
 import hashlib
 import jwt

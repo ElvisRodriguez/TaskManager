@@ -74,11 +74,9 @@ class TimeManager(object):
             True if date is ahead of or is current date, False otherwise.
         '''
         current_date = datetime.date.today()
-        given_date = date.split('-')
-        given_date = [int(value) for value in given_date]
-        given_date = datetime.date(
-            year=given_date[0], month=given_date[1], day=given_date[2]
-        )
+        date_components = date.split('-')
+        year, month, day = [int(component) for component in date_components]
+        given_date = datetime.date(year, month, day)
         self._days_ahead = (given_date - current_date).days
         if self._days_ahead < 0:
             return False

@@ -69,9 +69,7 @@ class TestManager(object):
         for test_file in test_files:
             with open(self.filename, 'a') as file:
                 file.write('{file} results:\n'.format(file=test_file))
-            os.system('python3 {file}'.format(file=test_file))
-            # Sleep added to fix possible cronjob bug.
-            time.sleep(5)
+            os.system('python {file}'.format(file=test_file))
 
     def determine_if_all_tests_passing(self) -> bool:
         '''Checks if all unit tests have passing results.
@@ -120,7 +118,7 @@ class TestManager(object):
 
 
 if __name__ == '__main__':
-    test_runner = TestManager()
-    test_runner.wipe_test_file()
-    test_runner.add_test_results_to_file()
-    test_runner.remove_non_text_from_file()
+    test_manager = TestManager()
+    test_manager.wipe_test_file()
+    test_manager.add_test_results_to_file()
+    test_manager.remove_non_text_from_file()

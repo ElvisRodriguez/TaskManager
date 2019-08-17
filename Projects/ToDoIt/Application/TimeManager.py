@@ -4,11 +4,18 @@ Manages timestamps and date/time retrieved from users and database.
 import datetime
 
 
+CURRENT_YEAR = datetime.datetime.now().year
+CURRENT_MONTH = datetime.datetime.now().month
+CURRENT_DAY = datetime.datetime.now().day
+CURRENT_HOUR = datetime.datetime.now().hour
+CURRENT_MINUTE = datetime.datetime.now().minute
+
+
 class TimeManager(object):
     '''Generates timestamps and date/times as well as verfies timestamps.
     '''
 
-    def __init__(self) -> None:
+    def __init__(self):
         '''Initializes object with empty attributes timestamp and _days_ahead.
 
         Args:
@@ -21,7 +28,7 @@ class TimeManager(object):
         self._days_ahead = None
 
     @staticmethod
-    def current_time() -> str:
+    def current_time():
         '''Retrieves the current time from datetime.datetime object.
 
         Args:
@@ -35,7 +42,7 @@ class TimeManager(object):
         return ':'.join([str(value) for value in current_time])
 
     @staticmethod
-    def current_date() -> str:
+    def current_date():
         '''Retrieves the current date from datetime.datetime object.
 
         Args:
@@ -49,7 +56,7 @@ class TimeManager(object):
         return '-'.join([str(value) for value in current_date])
 
     @staticmethod
-    def create_datetime_object(date: str, time: str) -> datetime.datetime:
+    def create_datetime_object(date, time):
         '''Creates a datetime object from date and time string representations.
 
         Args:
@@ -64,11 +71,11 @@ class TimeManager(object):
         datetime_object = datetime.datetime(year, month, day, hour, minute)
         return datetime_object
 
-    def is_valid_date(self, date: str) -> bool:
+    def is_valid_date(self, date):
         '''Checks if date given is ahead of or is current date.
 
         Args:
-            date: Date in the format 'YYYY-MM-DD' provided by user.
+            date (str): Date in the format 'YYYY-MM-DD' provided by user.
 
         Returns:
             True if date is ahead of or is current date, False otherwise.
@@ -82,11 +89,11 @@ class TimeManager(object):
             return False
         return True
 
-    def is_valid_time(self, time: str) -> bool:
+    def is_valid_time(self, time):
         '''Checks if time given is ahead of current time.
 
         Args:
-            time: Time in the format 'HH:MM' provided by user.
+            time (str): Time in the format 'HH:MM' provided by user.
 
         Returns:
             True if time is ahead of current time, False otherwise.
@@ -105,12 +112,12 @@ class TimeManager(object):
                 return False
         return True
 
-    def create_timestamp(self, date: str, time: str) -> bool:
+    def create_timestamp(self, date, time):
         '''Creates a timestamp with given date and time.
 
         Args:
-            date: Date in the format 'YYYY-MM-DD' provided by user.
-            time: Time in the fomat 'HH:MM' provided by user.
+            date (str): Date in the format 'YYYY-MM-DD' provided by user.
+            time (str): Time in the fomat 'HH:MM' provided by user.
 
         Returns:
             True if a timestamp is created (i.e. both the date and time are

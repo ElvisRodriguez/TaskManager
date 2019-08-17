@@ -7,42 +7,35 @@ import unittest
 import TimeManager
 
 
-CURRENT_YEAR = datetime.datetime.now().year
-CURRENT_MONTH = datetime.datetime.now().month
-CURRENT_DAY = datetime.datetime.now().day
-CURRENT_HOUR = datetime.datetime.now().hour
-CURRENT_MINUTE = datetime.datetime.now().minute
-
-
 class TestTimeManager(unittest.TestCase):
     def setUp(self):
         self.time_manager = TimeManager.TimeManager()
         self.invalid_date = '{year}-{month}-{day}'.format(
-            year=(CURRENT_YEAR - 1),
-            month=CURRENT_MONTH,
-            day=CURRENT_DAY
+            year=(TimeManager.CURRENT_YEAR - 1),
+            month=TimeManager.CURRENT_MONTH,
+            day=TimeManager.CURRENT_DAY
         )
         self.valid_date = '{year}-{month}-{day}'.format(
-            year=(CURRENT_YEAR + 1),
-            month=CURRENT_MONTH,
-            day=CURRENT_DAY
+            year=(TimeManager.CURRENT_YEAR + 1),
+            month=TimeManager.CURRENT_MONTH,
+            day=TimeManager.CURRENT_DAY
         )
         self.invalid_time = '{hour}:{minute}'.format(
-            hour=(CURRENT_HOUR - 1),
-            minute=CURRENT_MINUTE
+            hour=(TimeManager.CURRENT_HOUR - 1),
+            minute=TimeManager.CURRENT_MINUTE
         )
         self.valid_time = '{hour}:{minute}'.format(
-            hour=(CURRENT_HOUR + 1),
-            minute=CURRENT_MINUTE
+            hour=(TimeManager.CURRENT_HOUR + 1),
+            minute=TimeManager.CURRENT_MINUTE
         )
         self.current_date = '{year}-{month}-{day}'.format(
-            year=CURRENT_YEAR,
-            month=CURRENT_MONTH,
-            day=CURRENT_DAY
+            year=TimeManager.CURRENT_YEAR,
+            month=TimeManager.CURRENT_MONTH,
+            day=TimeManager.CURRENT_DAY
         )
         self.current_time = '{hour}:{minute}'.format(
-            hour=CURRENT_HOUR,
-            minute=CURRENT_MINUTE
+            hour=TimeManager.CURRENT_HOUR,
+            minute=TimeManager.CURRENT_MINUTE
         )
 
     def test_current_date(self):
@@ -55,11 +48,11 @@ class TestTimeManager(unittest.TestCase):
 
     def test_create_datetime_object(self):
         test_datetime = datetime.datetime(
-            CURRENT_YEAR,
-            CURRENT_MONTH,
-            CURRENT_DAY,
-            CURRENT_HOUR,
-            CURRENT_MINUTE
+            TimeManager.CURRENT_YEAR,
+            TimeManager.CURRENT_MONTH,
+            TimeManager.CURRENT_DAY,
+            TimeManager.CURRENT_HOUR,
+            TimeManager.CURRENT_MINUTE
         )
         datetime_object = TimeManager.TimeManager.create_datetime_object(
             self.current_date, self.current_time

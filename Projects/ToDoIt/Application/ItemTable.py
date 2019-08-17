@@ -30,13 +30,14 @@ class ItemTable(Table):
 class Item(object):
     '''Creates an Item object to be used for ItemTable class.'''
 
-    def __init__(self, id: int, task: str, date: str) -> None:
+    def __init__(self, id, task, date):
         '''Initializes Item object.
 
         Args:
-            id: ID of user's task.
-            task: Task of user of variable length (single and/or multiline)
-            date: A timestamp in the format 'YYYY-MM-DD HH:MM'
+            id (int): ID of user's task.
+            task (str): Task of user of variable length
+                           (single and/or multiline)
+            date (str): A timestamp in the format 'YYYY-MM-DD HH:MM'
 
         Returns:
             None.
@@ -46,11 +47,12 @@ class Item(object):
         self.date = date
 
 
-def objectify(rows: list) -> list:
+def objectify(rows):
     '''Converts a list of 3-tuples from todo_table database into Item objects.
 
     Args:
-        rows: List of 3-tuples representing a task and its reminder date/time.
+        rows (list): List of 3-tuples representing a task and its reminder
+                     date/time.
 
     Returns:
         A list, items, containing Item object representations of the tuples

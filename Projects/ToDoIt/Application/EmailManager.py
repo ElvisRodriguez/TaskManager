@@ -58,11 +58,11 @@ class EmailManager(object):
         '''Initializes smtplib email handler.
 
         Args:
-            sender: Email of application, generally not an argument that
+            sender (str): Email of application, generally not an argument that
                     should be changed from the default.
-            password: Password of sender, can be passed in the constructor,
-                      provided as a command line argument, or given as input
-                      when prompted.
+            password (str): Password of sender, can be passed in the
+                            constructor, provided as a command line argument, or
+                            given as input when prompted.
 
         Returns:
             None.
@@ -82,12 +82,12 @@ class EmailManager(object):
         self.message = MIMEMultipart('alternative')
         self.STATUS_CODES = [235, 250]
 
-    def create_password_reset_message(self, username: str, url: str) -> None:
+    def create_password_reset_message(self, username, url):
         '''Formats an email with instructions for a password reset.
 
         Args:
-            username: Username of user requesting a password reset.
-            url: URL of application's password reset page.
+            username (str): Username of user requesting a password reset.
+            url (str): URL of application's password reset page.
 
         Returns:
             None.
@@ -97,12 +97,12 @@ class EmailManager(object):
         html = PASSWORD_RESET_HTML.format(username=username, url=url)
         self.message.attach(MIMEText(html, 'html'))
 
-    def create_test_result_message(self, passing: bool, message: str) -> None:
+    def create_test_result_message(self, passing, message):
         '''Formats an email with the results of application's unit tests.
 
         Args:
-            passing: True if all unit tests are passing, false otherwise.
-            message: Message containing output of unit tests.
+            passing (bool): True if all unit tests are passing, false otherwise.
+            message (str): Message containing output of unit tests.
 
         Returns:
             None.
@@ -115,11 +115,11 @@ class EmailManager(object):
         self.message.attach(MIMEText(message, 'plain'))
         self.message.attach(MIMEText(html, 'html'))
 
-    def send_email(self, recepient: str) -> None:
+    def send_email(self, recepient):
         '''Sends preformatted email to recepient.
 
         Args:
-            recepient: Email of the intended recepient.
+            recepient (str): Email of the intended recepient.
 
         Returns:
             None.

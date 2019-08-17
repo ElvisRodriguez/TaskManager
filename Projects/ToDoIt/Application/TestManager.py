@@ -13,18 +13,19 @@ class TestManager(object):
     '''Finds all python test modules and runs them, saving their output.
     '''
 
-    def __init__(self, filename='test_output.txt') -> None:
+    def __init__(self, filename='test_output.txt'):
         '''Initializes object with filename of test output.
 
         Args:
             filename: filename where unit test results should be piped to.
                       Generally this argument should remain as the default.
 
-        Returns None.
+        Returns:
+            None.
         '''
         self.filename = filename
 
-    def __find_test_files(self) -> list:
+    def __find_test_files(self):
         '''Finds all python unit test modules in the current directory.
 
         Args:
@@ -40,7 +41,7 @@ class TestManager(object):
                 test_files.append(filename)
         return test_files
 
-    def wipe_test_file(self) -> None:
+    def wipe_test_file(self):
         '''Opens self.filename and wipes it of previous test data.
 
         Args:
@@ -56,7 +57,7 @@ class TestManager(object):
                 'Tests Results as of {date}:\n'.format(date=current_date)
             )
 
-    def add_test_results_to_file(self) -> None:
+    def add_test_results_to_file(self):
         '''Runs every unit test file found and writes ouput to self.filename.
 
         Args:
@@ -71,7 +72,7 @@ class TestManager(object):
                 file.write('{file} results:\n'.format(file=test_file))
             os.system('python {file}'.format(file=test_file))
 
-    def determine_if_all_tests_passing(self) -> bool:
+    def determine_if_all_tests_passing(self):
         '''Checks if all unit tests have passing results.
 
         Args:
@@ -91,7 +92,7 @@ class TestManager(object):
             return True
         return False
 
-    def remove_non_text_from_file(self) -> None:
+    def remove_non_text_from_file(self):
         '''Removes all unimportant text from test file output.
 
         Args:

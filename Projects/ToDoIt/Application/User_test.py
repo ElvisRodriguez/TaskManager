@@ -45,6 +45,11 @@ class TestUser(unittest.TestCase):
         self.assertIsNotNone(self.user.id)
         self.assertIsInstance(self.user.id, int)
 
+    def test_retrieve_email(self):
+        result = self.user.retrieve_email()
+        message = 'Users email should exist in the database'
+        self.assertEqual(self.email, result, message)
+
     def test_reset_password_with_same_password(self):
         result = self.user.reset_password(self.password)
         self.assertFalse(result)

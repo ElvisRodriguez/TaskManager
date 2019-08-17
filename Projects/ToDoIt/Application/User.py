@@ -1,7 +1,6 @@
 '''
 Manages all ToDoIt users including login and password reset functionality.
 '''
-from typing import *
 
 import flask_login
 import hashlib
@@ -15,13 +14,14 @@ class User(flask_login.UserMixin):
     '''Subclass of flask_login.UserMixin, also handles database user data.
     '''
 
-    def __init__(self, username: str, database='todo_table.db') -> None:
+    def __init__(self, username, database='todo_table.db'):
         '''Initializes User object with username and database.
 
         Args:
-            username: Username of user.
-            database: Database where User data is stored, this argument should
-                      be kept as the default except for class unit tests.
+            username (str): Username of user, must be unique if registering.
+            database (str): Database where User data is stored, this argument
+                            should be kept as the default except for class unit
+                            tests.
 
         Returns:
             None.
@@ -30,11 +30,11 @@ class User(flask_login.UserMixin):
         self.username = username
         self.database = database
 
-    def __hash_password(self, password: str) -> str:
+    def __hash_password(self, password):
         '''Hashes a password using sha256 + salt.
 
         Args:
-            password: Password to be hashed.
+            password (str): Password to be hashed.
 
         Returns:
             A hashed value of password.
@@ -44,16 +44,15 @@ class User(flask_login.UserMixin):
             salt.encode() + password.encode()
         ).hexdigest() + ':' + salt
 
-    def __check_password(
-        self, hashed_password: str, user_password: str
-    ) -> bool:
+    def __check_password(self, hashed_password, user_password):
         '''Checks if a password is the same as a hashed password by hashing it.
 
         Args:
-            hashed_password: Password that has been hashed with __hash_password.
-            user_password: Password that is to be checked against
-                           hashed_password by being hashed itself and removing
-                           the salt value.
+            hashed_password (str): Password that has been hashed with
+                                   __hash_password.
+            user_password (str): Password that is to be checked against
+                                 hashed_password by being hashed itself and
+                                 removing the salt value.
 
         Returns:
             True if the passwords hash to same value, False otherwise.
@@ -63,13 +62,13 @@ class User(flask_login.UserMixin):
             salt.encode() + user_password.encode()
         ).hexdigest()
 
-    def insert_new_user(self, password: str, email: str) -> bool:
+    def insert_new_user(self, password, email):
         '''Inserts a new user into the database.
 
         Args:
-            password: Password given by user that will be hashed prior to
-                      database insertion.
-            email: Email provided by user.
+            password (str): Password given by user that will be hashed prior to
+                            database insertion.
+            email (str): Email provided by user.
 
         Returns:
             True if self.username is new (unique), False otherwise.
@@ -89,11 +88,11 @@ class User(flask_login.UserMixin):
             connection.close()
             return False
 
-    def login_user(self, password: str) -> bool:
+    def login_user(self, password):
         '''Checks if username/password credentials are valid.
 
         Args:
-            password: Password provided by user attempting to login.
+            password (str): Password provided by user attempting to login.
 
         Returns:
             True if username and passwords match what's stored in the database,
@@ -113,7 +112,7 @@ class User(flask_login.UserMixin):
             return True
         return False
 
-    def find_id(self) -> None:
+    def find_id(self):
         '''Finds the UserID of User in database using self.username.
 
         Args:
@@ -131,11 +130,29 @@ class User(flask_login.UserMixin):
         connection.close()
         self.id = row[0]
 
-    def reset_password(self, new_password: str) -> bool:
+    def retrieve_email(self):
+        '''Retrieves a user's email from the database.
+
+        Args:
+            None
+
+        Returns:
+            Email of user.
+        '''
+        connection = sql.connect(self.database)
+        cursor = connection.cursor()
+        cursor.execute('SELECT Email FROM Users WHERE Username=?',
+                       (self.username,)
+                       )
+        email = cursor.fetchone()[0]
+        connection.close()
+        return email
+
+    def reset_password(self, new_password):
         '''Changes user's password to a new password.
 
         Args:
-            new_password: New password provided by user.
+            new_password (str): New password provided by user.
 
         Returns:
             True if new_password is not the same as previous password, False
@@ -160,16 +177,14 @@ class User(flask_login.UserMixin):
         connection.close()
         return True
 
-    def get_reset_password_token(
-        self, secret_key: str, id: int, expires_in=600
-    ) -> None:
+    def get_reset_password_token(self, secret_key, id, expires_in=600):
         '''Generates a token to be used for a secure password reset link.
 
         Args:
-            secret_key: Application's randomly generated string used for
+            secret_key (str): Application's randomly generated string used for
                         securing tokens/certificates.
-            id: ID of user (corresponds to UserID in the database).
-            expires_in: Integer representing the time in seconds (
+            id (int): ID of user (corresponds to UserID in the database).
+            expires_in (int): Integer representing the time in seconds (
                         input/60 = seconds) that the generated token remains
                         'fresh', afterwards token will become 'stale' causing
                         any url using token to return a 404 response.
@@ -186,12 +201,12 @@ class User(flask_login.UserMixin):
         ).decode('utf-8')
 
     @staticmethod
-    def find_username_with_email(database: str, email: str) -> str:
+    def find_username_with_email(database, email):
         '''Retrieves username from database with user's email.
 
         Args:
-            database: Database to retrieve username.
-            email: Email that should correspond to a username.
+            database (str): Database to retrieve username.
+            email (str): Email that should correspond to a username.
 
         Returns:
             Username if email is valid, else None.
@@ -208,12 +223,12 @@ class User(flask_login.UserMixin):
         return None
 
     @staticmethod
-    def find_username_with_id(database: str, id: int) -> str:
+    def find_username_with_id(database, id):
         '''Retrieves username from database with user's UserID id.
 
         Args:
-            database: Database to retrieve username.
-            id: ID that should correspond to a username.
+            database (str): Database to retrieve username.
+            id (int): ID that should correspond to a username.
 
         Returns:
             Username if id is valid, else None.
@@ -230,15 +245,15 @@ class User(flask_login.UserMixin):
         return None
 
     @staticmethod
-    def find_id_with_username(database: str, username: str) -> int:
+    def find_id_with_username(database, username):
         '''Retrieves UserID from database with user's username.
 
         Args:
-            database: Database to retrieve UserID.
-            username: Username that should correspond to a UserID.
+            database (str): Database to retrieve UserID.
+            username (str): Username that should correspond to a UserID.
 
         Returns:
-            UserID of user.
+            UserID (int) of user.
         '''
         connection = sql.connect(database)
         cursor = connection.cursor()
@@ -251,16 +266,16 @@ class User(flask_login.UserMixin):
         return None
 
     @staticmethod
-    def verify_reset_password_token(token: str, secret_key: str) -> int:
+    def verify_reset_password_token(token, secret_key):
         '''Verifies that a token is valid and has not yet expired.
 
         Args:
-            token: Token generated with get_reset_password_token().
-            secret_key: Application's randomly generated string used for
+            token (str): Token generated with get_reset_password_token().
+            secret_key (str): Application's randomly generated string used for
                         securing tokens/certificates.
 
         Returns:
-            UserID of user trying to reset their password if the token is
+            UserID (int) of user trying to reset their password if the token is
             decoded successfully (i.e. is valid and not yet expired) else None.
         '''
         try:

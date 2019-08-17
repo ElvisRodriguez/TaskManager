@@ -20,25 +20,7 @@ class TaskManager(object):
         '''
         self.database = database
 
-    def retrieve_email(self, username: str) -> str:
-        '''Retrieves a user's email from the database.
-
-        Args:
-            username: Username of user that email corresponds to.
-
-        Returns:
-            Email of user.
-        '''
-        connection = sql.connect(self.database)
-        cursor = connection.cursor()
-        cursor.execute('SELECT Email FROM Users WHERE Username=?',
-                       (username,)
-                       )
-        email = cursor.fetchone()[0]
-        connection.close()
-        return email
-
-    def insert_new_task(self, task: str, date: str, username: str) -> None:
+    def insert_new_task(self, task, date, username):
         '''Inserts a new task row into the database.
 
         Args:
@@ -59,7 +41,7 @@ class TaskManager(object):
         connection.commit()
         connection.close()
 
-    def remove_task(self, task: str, date: str, username: str) -> None:
+    def remove_task(self, task, date, username):
         '''Removes a task row from the database.
 
         Args:
@@ -80,11 +62,11 @@ class TaskManager(object):
         connection.commit()
         connection.close()
 
-    def remove_task_by_id(self, id: int) -> None:
+    def remove_task_by_id(self, id):
         '''Removes a task row from the database.
 
         Args:
-            id: ID of databse task row.
+            id (int): ID of databse task row.
 
         Returns:
             None.
@@ -95,11 +77,11 @@ class TaskManager(object):
         connection.commit()
         connection.close()
 
-    def retrieve_tasks(self, username: str) -> list:
+    def retrieve_tasks(self, username):
         '''Retrieves all tasks belonging to a user.
 
         Args:
-            username: Username of user.
+            username (str): Username of user.
 
         Returns:
             A list of database rows (represented as 3-tuples).
@@ -114,11 +96,11 @@ class TaskManager(object):
         connection.close()
         return all_tasks
 
-    def retrieve_task_by_id(self, id: int) -> list:
+    def retrieve_task_by_id(self, id):
         '''Retrieves a task from the database with a row ID of id.
 
         Args:
-            id: ID of task row.
+            id (int): ID of task row.
 
         Returns:
             A list containing a single database row (represented as a 3-tuple).

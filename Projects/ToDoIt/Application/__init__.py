@@ -9,7 +9,6 @@ from flask_login import (current_user, login_user, LoginManager, login_required,
                          logout_user)
 
 import os
-import sqlite3 as sql
 
 import EmailManager
 import forms
@@ -62,8 +61,8 @@ def index():
         time_manager = TimeManager.TimeManager()
         task = form.task.data
         timestamp = form.timestamp.data
-        date, time = str(timestamp).split(' ')
-        if not time_manager.create_timestamp(date, time):
+        given_date, given_time = str(timestamp).split(' ')
+        if not time_manager.create_timestamp(given_date, given_time):
             error = 'Date/Time must be after current Date/Time'
             return render_template(
                 'index.html', username=username, error=error, title='Home',

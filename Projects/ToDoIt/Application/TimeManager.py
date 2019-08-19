@@ -104,7 +104,7 @@ class TimeManager(object):
         current_time = datetime.datetime.now()
         current_hour = current_time.hour
         current_minute = current_time.minute
-        given_hour, given_minute = [int(value) for value in time.split(':')]
+        given_hour, given_minute = [int(value) for value in time.split(':') if value != '00']
         if given_hour < current_hour:
             return False
         if given_hour == current_hour:

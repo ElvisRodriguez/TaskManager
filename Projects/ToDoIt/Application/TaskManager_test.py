@@ -43,7 +43,7 @@ class TestTaskManager(unittest.TestCase):
         self.assertIsNotNone(actual_task)
         self.assertEqual(self.task, actual_task, message)
 
-    def test_retrieve_task_by_id(self):
+    def test_insert_and_retrieve_task_by_id(self):
         task_message, date = self.unique_task
         self.task_manager.insert_new_task(task_message, date, self.username)
         id = self.retrieve_id()

@@ -3,6 +3,9 @@ import pkg_resources
 import sys
 
 
+PATH = '/home/elvisrodriguez1992/py_scripts/general'
+
+
 def get_package_names():
     packages = pkg_resources.working_set
     package_names = []
@@ -12,13 +15,17 @@ def get_package_names():
 
 
 def write_package_names_to_file(package_names):
-    with open('pip_packages.txt', 'w') as file:
+    os.chdir(PATH)
+    file_path = os.path.join(PATH, 'pip_packages.txt')
+    with open(file_path, 'w') as file:
         for name in package_names:
             file.write('{name}\n'.format(name=name))
 
 
 def get_package_names_from_file():
     package_names = []
+    os.chdir(PATH)
+    file_path = os.path.join(PATH, 'pip_packages.txt')
     with open('pip_packages.txt', 'r') as file:
         for line in file.readlines():
             name = line.strip('\n')

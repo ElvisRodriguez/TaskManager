@@ -1,8 +1,8 @@
-import datetime
-import time
+'''
+Module for useful constants and functions.
+'''
 
 #Constants
 
-LOWER_ALPHA = ''.join([chr(i) for i in range(97, 123)])
-DIGITS = ''.join([str(i) for i in range(10)])
-UPPER_ALPHA = ''.join([char.upper() for char in LOWER_ALPHA])
+LOWER_ALPHABET = ''.join([chr(i) for i in range(97, 123)])
+UPPER_ALPHABET = ''.join([char.upper() for char in LOWER_ALPHABET])

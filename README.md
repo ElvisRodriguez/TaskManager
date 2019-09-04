@@ -1,2 +1,3 @@
-# py_scripts
-Collection of useful python scripts to aid other projects
+# TaskManager
+
+Repository for ToDoIt Task Manager Web Application

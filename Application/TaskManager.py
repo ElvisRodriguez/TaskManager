@@ -8,7 +8,7 @@ class TaskManager(object):
     '''Manages insertion, deletion, and retrieval of tasks.
     '''
 
-    def __init__(self, database='todo_table.db'):
+    def __init__(self, database='/home/ElvisRodriguez/TaskManager/Application/todo_table.db'):
         '''Initializes object with database name.
 
         Args:

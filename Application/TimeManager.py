@@ -123,7 +123,7 @@ class TimeManager(object):
             True if a timestamp is created (i.e. both the date and time are
             valid) else False.
         '''
-        if self.is_valid_date(date) and self.is_valid_time(time):
+        if self.is_valid_date(date) or self.is_valid_time(time):
             self.timestamp = '{date} {time}'.format(date=date, time=time)
             return True
         return False

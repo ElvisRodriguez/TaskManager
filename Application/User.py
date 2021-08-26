@@ -9,12 +9,11 @@ import sqlite3 as sql
 import time
 import uuid
 
-
 class User(flask_login.UserMixin):
     '''Subclass of flask_login.UserMixin, also handles database user data.
     '''
 
-    def __init__(self, username, database='todo_table.db'):
+    def __init__(self, username, database='/home/ElvisRodriguez/TaskManager/Application/todo_table.db'):
         '''Initializes User object with username and database.
 
         Args:

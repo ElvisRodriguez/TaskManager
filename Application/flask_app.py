@@ -18,7 +18,7 @@ import TimeManager
 import User
 
 
-DATABASE = 'todo_table.db'
+DATABASE = '/home/ElvisRodriguez/TaskManager/Application/todo_table.db'
 
 
 app = Flask(__name__)
